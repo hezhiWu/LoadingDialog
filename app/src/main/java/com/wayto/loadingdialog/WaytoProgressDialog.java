@@ -178,6 +178,18 @@ public class WaytoProgressDialog extends ProgressDialog {
      * author: hezhiWu
      * created at 2017/8/4 15:24
      *
+     * @param msgId 提示消息
+     */
+    public void setPromptMessage(int msgId) {
+        setPromptMessage(getContext().getString(msgId));
+    }
+
+    /**
+     * 加完完成，设置提示语
+     * <p>
+     * author: hezhiWu
+     * created at 2017/8/4 15:24
+     *
      * @param msg 提示消息
      */
     public void setPromptMessage(String msg) {
@@ -190,25 +202,75 @@ public class WaytoProgressDialog extends ProgressDialog {
      * author: hezhiWu
      * created at 2017/8/4 15:32
      *
+     * @param msgId  提示消息
+     * @param finish 设置dimiss对话框，是否finish当前Activity; true-finish,false-not finish
+     */
+    public void setPromptMessage(int msgId, boolean finish) {
+        setPromptMessage(getContext().getString(msgId), finish);
+    }
+
+
+    /**
+     * 加完完成，设置提示语
+     * <p>
+     * author: hezhiWu
+     * created at 2017/8/4 15:32
+     *
      * @param msg    提示消息
-     * @param finish 设置dimiss圣诞框，是否finish当前Activity; true-finish,false-not finish
+     * @param finish 设置dimiss对话框，是否finish当前Activity; true-finish,false-not finish
      */
     public void setPromptMessage(String msg, boolean finish) {
+        setPromptMessage(0, msg, finish);
+    }
+
+    /**
+     * 加完完成，设置提示语
+     * <p>
+     * author: hezhiWu
+     * created at 2017/8/4 16:09
+     *
+     * @param icon   设置提示图标
+     * @param msgId  设置提示信息
+     * @param finish 设置dimiss对话框，是否finish当前Activity; true-finish,false-not finish
+     */
+    public void setPromptMessage(int icon, int msgId, boolean finish) {
+        setPromptMessage(icon, getContext().getString(msgId), finish);
+    }
+
+    /**
+     * 加完完成，设置提示语
+     * <p>
+     * author: hezhiWu
+     * created at 2017/8/4 16:09
+     *
+     * @param icon   设置提示图标
+     * @param msg    设置提示信息
+     * @param finish 设置dimiss对话框，是否finish当前Activity; true-finish,false-not finish
+     */
+    public void setPromptMessage(int icon, String msg, boolean finish) {
         this.finish = finish;
 
         progressBar.setVisibility(View.GONE);
-        tipTextView.setVisibility(View.VISIBLE);
-        tipImageView.setVisibility(View.GONE);
 
-        tipTextView.setText(msg);
+        if (icon <= 0) {
+            tipImageView.setVisibility(View.GONE);
+        } else {
+            tipImageView.setImageResource(icon);
 
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                handler.sendEmptyMessage(0x980);
-            }
-        }, 2000);
+            tipImageView.setVisibility(View.VISIBLE);
+        }
+
+        if (TextUtils.isEmpty(msg)) {
+            tipTextView.setVisibility(View.GONE);
+        } else {
+            tipTextView.setText(msg);
+
+            tipTextView.setVisibility(View.VISIBLE);
+        }
+
+        handler.sendEmptyMessageDelayed(0x980, 2000);
     }
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
