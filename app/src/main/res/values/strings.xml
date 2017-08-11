@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LoadingDialog</string>
+    <string name="app_name">Wayto Dialog</string>
 
     <string name="loading">加载</string>
 </resources>

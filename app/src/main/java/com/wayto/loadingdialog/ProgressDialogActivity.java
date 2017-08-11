@@ -23,7 +23,7 @@ public class ProgressDialogActivity extends AppCompatActivity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 0x901:
-                    progressDialog.setPromptMessage("提交成功");
+                    progressDialog.setPromptMessage(R.mipmap.icon_ok,"提交成功");
                     break;
             }
         }

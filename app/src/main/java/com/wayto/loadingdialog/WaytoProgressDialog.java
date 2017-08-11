@@ -3,6 +3,7 @@ package com.wayto.loadingdialog;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -29,11 +30,13 @@ public class WaytoProgressDialog extends ProgressDialog {
 
     private Context context;
 
-    private ProgressBar progressBar;
     private TextView tipTextView;
     private ImageView tipImageView;
 
+    private AnimationDrawable animationDrawable;
+
     private CharSequence message;
+    private int mIcon;
     private boolean finish;
 
     public WaytoProgressDialog(Context context) {
@@ -80,14 +83,18 @@ public class WaytoProgressDialog extends ProgressDialog {
         int width = (int) (window.getWindowManager().getDefaultDisplay().getWidth() * 0.3f);
         window.setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        progressBar = (ProgressBar) findViewById(R.id.progress);
         tipImageView = (ImageView) findViewById(R.id.progress_tip_ImageView);
         tipTextView = (TextView) findViewById(R.id.progress_tip_textView);
+
+        tipImageView.setImageResource(R.drawable.wayto_progress_animation);
+        animationDrawable = (AnimationDrawable) tipImageView.getDrawable();
+        animationDrawable.start();
 
         if (!TextUtils.isEmpty(message)) {
             tipTextView.setText(message);
             tipTextView.setVisibility(View.VISIBLE);
         }
+
     }
 
     /**
@@ -161,6 +168,9 @@ public class WaytoProgressDialog extends ProgressDialog {
         return progressDialog;
     }
 
+    public void setmIcon(int mIcon) {
+        this.mIcon = mIcon;
+    }
 
     /**
      * 设置Message
@@ -194,6 +204,26 @@ public class WaytoProgressDialog extends ProgressDialog {
      */
     public void setPromptMessage(String msg) {
         setPromptMessage(msg, false);
+    }
+
+    /**
+     * 加完完成，设置提示语
+     * <p>
+     * author: hezhiWu
+     * created at 2017/8/11 10:27
+     */
+    public void setPromptMessage(int icon, String msg) {
+        setPromptMessage(icon, msg, false);
+    }
+
+    /**
+     * 加完完成，设置提示语
+     * <p>
+     * author: hezhiWu
+     * created at 2017/8/11 10:28
+     */
+    public void setPromptMessage(int icon, int msgId) {
+        setPromptMessage(icon, getContext().getString(msgId));
     }
 
     /**
@@ -248,9 +278,10 @@ public class WaytoProgressDialog extends ProgressDialog {
      * @param finish 设置dimiss对话框，是否finish当前Activity; true-finish,false-not finish
      */
     public void setPromptMessage(int icon, String msg, boolean finish) {
-        this.finish = finish;
+        if (animationDrawable != null)
+            animationDrawable.stop();
 
-        progressBar.setVisibility(View.GONE);
+        this.finish = finish;
 
         if (icon <= 0) {
             tipImageView.setVisibility(View.GONE);
